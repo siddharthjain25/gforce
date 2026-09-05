@@ -38,11 +38,57 @@ CUDACXX=/usr/local/cuda/bin/nvcc cmake ..
 
 ## Running the Engine
 
-You can run the engine directly or connect it to any UCI-compatible GUI (like Cute Chess or Arena):
+There are three main ways to run G-ForceZero locally:
+
+### 1. Interactive / UCI Mode
+Run the engine directly from the command line to interact with it using standard UCI commands:
 
 ```bash
 ./G-ForceZero
 ```
+
+Common UCI commands:
+- `uci` - Initialize engine and display options.
+- `isready` - Verify engine readiness.
+- `position startpos moves e2e4 c7c5` - Set up a board position.
+- `go depth 10` or `go movetime 3000` - Start calculation (for a specified depth or milliseconds).
+- `quit` - Exit the engine.
+
+### 2. Chess GUI Integration (Cute Chess, Arena, etc.)
+To play against G-ForceZero visually or run engine matches:
+1. Install a UCI-compatible GUI such as **Cute Chess** or **Arena**.
+2. Add a new engine in the GUI settings:
+   - **Engine Name:** `G-ForceZero`
+   - **Binary Path:** `/path/to/gforce/G-ForceZero`
+   - **Working Directory:** `/path/to/gforce` (to access neural network and data files).
+
+### 3. Running as a Lichess Bot Locally
+You can connect G-ForceZero to play live games automatically on Lichess using [`lichess-bot`](https://github.com/lichess-bot-devs/lichess-bot):
+
+1. **Create Bot Account & API Token:**
+   - Register a dedicated account on [Lichess.org](https://lichess.org) and upgrade it at [lichess.org/upgrade-bot](https://lichess.org/upgrade-bot).
+   - Generate a Personal Access Token at [lichess.org/account/oauth/token](https://lichess.org/account/oauth/token) with the **"Play games with the bot API"** scope enabled.
+
+2. **Set up `lichess-bot`:**
+   ```bash
+   git clone https://github.com/lichess-bot-devs/lichess-bot.git
+   cd lichess-bot
+   pip install -r requirements.txt
+   ```
+
+3. **Configure `config.yml`:**
+   Copy the provided template configuration:
+   ```bash
+   cp ../render/config.yml ./config.yml
+   ```
+   Edit `config.yml`:
+   - Replace `"YOUR_API_TOKEN"` with your Lichess API Token.
+   - Update `engine.dir` to point to your absolute repository path (e.g. `/path/to/gforce`).
+
+4. **Start the Bot:**
+   ```bash
+   python3 lichess-bot.py
+   ```
 
 ## Training Pipeline
 
