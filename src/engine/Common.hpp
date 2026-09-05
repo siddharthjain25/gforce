@@ -430,6 +430,14 @@ INLINE void AlignedMemcpy64(T* dst, const T* src)
     {
         _mm_store_si128(dst128 + i, _mm_load_si128(src128 + i));
     }
+#elif defined(USE_ARM_NEON)
+    const uint8_t* src8 = reinterpret_cast<const uint8_t*>(src);
+    uint8_t* dst8 = reinterpret_cast<uint8_t*>(dst);
+    for (size_t i = 0; i < size; i += 64)
+    {
+        uint8x16x4_t chunk = vld1q_u8_x4(src8 + i);
+        vst1q_u8_x4(dst8 + i, chunk);
+    }
 #else
     std::memcpy(reinterpret_cast<void*>(dst), reinterpret_cast<const void*>(src), size);
 #endif
