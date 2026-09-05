@@ -12,6 +12,10 @@
     #include <immintrin.h>
 #endif
 
+#ifdef USE_ARM_NEON
+    #include <arm_neon.h>
+#endif
+
 #if defined(_WIN32)
     #define PLATFORM_WINDOWS
     #include <intrin.h>
